@@ -32,6 +32,7 @@ jobs:
         mingw-w64-x86_64-pixman \
         mingw-w64-x86_64-pkg-config \
         mingw-w64-x86_64-SDL2 \
+        mingw-w64-x86_64-libsamplerate \
         python3 \
         "
         C:\tools\msys64\usr\bin\bash.exe -lc "pacman -Scc --noconfirm"
