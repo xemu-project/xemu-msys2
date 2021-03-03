@@ -13,11 +13,11 @@ jobs:
     env:
       BUILD_TAG:
     steps:
-    - name: Define Build Tag
-      shell: python
+    - name: Create Build Tag
+      shell: bash
       run: |
-        from datetime import datetime
-        print('::set-env name=BUILD_TAG::v' + datetime.now().strftime('%y%m%d%H%M%S'))
+        export BUILD_TAG=build-$(date -u +'%Y%m%d%H%M')
+        echo "BUILD_TAG=$BUILD_TAG" >> $GITHUB_ENV
     - name: Install MSYS2 & Dependencies
       run: |
         choco install msys2 --no-progress
@@ -51,12 +51,12 @@ jobs:
         prerelease: false
     - name: Upload Release Assets
       if: github.event_name == 'push'
-      id: upload-release-asset 
+      id: upload-release-asset
       uses: actions/upload-release-asset@v1.0.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
         asset_path: msys64.7z
         asset_name: msys64.7z
         asset_content_type: application/zip
